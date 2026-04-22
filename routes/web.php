@@ -1,21 +1,32 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+/**
+ * routes/web.php
+ *
+ * CHANGE: Replace the anonymous closure on GET '/' with ManhuaController@index.
+ *
+ * Why a dedicated controller instead of a closure?
+ * — Closures can't be cached by `php artisan route:cache`, which is important
+ *   for production performance. A named controller method is always cacheable.
+ * — It keeps the route file clean and moves business logic where it belongs.
+ */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+use App\Http\Controllers\ManhuaController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+// ── Public Routes ──────────────────────────────────────────────────────────────
+
+/**
+ * Manhua Homepage
+ * Renders ManhuaHome.vue via Inertia with homepage data.
+ */
+Route::get('/', [ManhuaController::class, 'index'])->name('home');
+
+// ── Authenticated Routes ───────────────────────────────────────────────────────
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return inertia('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
