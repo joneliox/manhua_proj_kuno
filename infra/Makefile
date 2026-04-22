@@ -24,7 +24,7 @@ install-breeze:
 	$(COMPOSE_BASE) up -d php db
 	@echo "⏳ Waiting for DB to be healthy..."
 	@until docker compose -f docker-compose.yml exec db mysqladmin ping -h localhost --silent; do sleep 2; done
-	# $(COMPOSE_BASE) exec php php artisan key:generate
+	$(COMPOSE_BASE) exec php php artisan key:generate
 	$(COMPOSE_BASE) exec php composer require laravel/breeze --dev
 	$(COMPOSE_BASE) exec php php artisan breeze:install
 	$(COMPOSE_DEV) up -d node nginx
