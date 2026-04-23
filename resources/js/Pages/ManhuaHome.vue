@@ -18,7 +18,7 @@ const featured = ref(props.featuredManhua.length ? props.featuredManhua : [
     { id: 3, title: 'Martial Peak', cover: null, genre: 'Martial Arts · Romance', rating: '9.2', chapters: 891, description: 'The journey to the martial peak is a lonely, solitary and long one. In the face of adversity, you must survive and remain unyielding.' },
     { id: 4, title: 'Battle Through the Heavens', cover: null, genre: 'Fantasy · Action', rating: '9.6', chapters: 505, description: 'In a land where no magic is present, a land where only those with innate talent can challenge the heavens.' },
     { id: 5, title: "The King's Avatar", cover: null, genre: 'Gaming · Sport', rating: '9.4', chapters: 322, description: 'Regarded as a pro-player legend, Ye Xiu is forced to retire but mounts the greatest comeback in esports history.' },
-]);
+
 
 const trending = ref(props.trendingToday.length ? props.trendingToday : [
     { id: 1, title: 'Soul Land IV', cover: null, genre: 'Action', rating: '9.8', rank: 1, views: '2.1M', chapters: 412 },
