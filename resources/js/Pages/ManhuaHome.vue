@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 
 // ─── Props from Inertia controller ────────────────────────────────────────────
 const props = defineProps({
@@ -17,8 +17,8 @@ const featured = ref(props.featuredManhua.length ? props.featuredManhua : [
     { id: 2, title: 'Dragon Prince Yuan', cover: null, genre: 'Cultivation · Adventure', rating: '9.5', chapters: 389, description: 'A crown prince whose sacred dragon spirit was stolen must rise through impossible trials to reclaim his destiny.' },
     { id: 3, title: 'Martial Peak', cover: null, genre: 'Martial Arts · Romance', rating: '9.2', chapters: 891, description: 'The journey to the martial peak is a lonely, solitary and long one. In the face of adversity, you must survive and remain unyielding.' },
     { id: 4, title: 'Battle Through the Heavens', cover: null, genre: 'Fantasy · Action', rating: '9.6', chapters: 505, description: 'In a land where no magic is present, a land where only those with innate talent can challenge the heavens.' },
-    { id: 5, title: 'The King's Avatar', cover: null, genre: 'Gaming · Sport', rating: '9.4', chapters: 322, description: 'Regarded as a pro-player legend, Ye Xiu is forced to retire but mounts the greatest comeback in esports history.' },
-]);
+    { id: 5, title: "The King's Avatar", cover: null, genre: 'Gaming · Sport', rating: '9.4', chapters: 322, description: 'Regarded as a pro-player legend, Ye Xiu is forced to retire but mounts the greatest comeback in esports history.' },
+
 
 const trending = ref(props.trendingToday.length ? props.trendingToday : [
     { id: 1, title: 'Soul Land IV', cover: null, genre: 'Action', rating: '9.8', rank: 1, views: '2.1M', chapters: 412 },
@@ -57,8 +57,15 @@ const latest = ref(props.latestUpdates.length ? props.latestUpdates : [
     { id: 12, title: 'Coiling Dragon', cover: null, genre: 'Fantasy', latestChapter: 440, updatedAt: '1 day ago', isNew: false },
 ]);
 
+const page = usePage();
+const authUser = computed(() => page.props.auth?.user ?? null);
+const canLogin = computed(() => page.props.canLogin !== false);
+const canRegister = computed(() => page.props.canRegister !== false);
+
 // ─── NAVBAR STATE ──────────────────────────────────────────────────────────────
 const mobileMenuOpen = ref(false);
+const accountMenuOpen = ref(false);
+const accountMenuRef = ref(null);
 const searchOpen = ref(false);
 const searchQuery = ref('');
 const scrolled = ref(false);
@@ -70,14 +77,26 @@ const navLinks = [
     { label: 'Genres', href: '#genres' },
     { label: 'Latest', href: '#latest' },
     { label: 'Rankings', href: '#trending' },
+    { label: 'Login', href: '#trending' },
 ];
 
 const handleScroll = () => {
     scrolled.value = window.scrollY > 20;
 };
 
-onMounted(() => window.addEventListener('scroll', handleScroll));
-onUnmounted(() => window.removeEventListener('scroll', handleScroll));
+const closeAccountOnDocClick = (e) => {
+    if (!accountMenuOpen.value || !accountMenuRef.value) return;
+    if (!accountMenuRef.value.contains(e.target)) accountMenuOpen.value = false;
+};
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('click', closeAccountOnDocClick);
+});
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+    document.removeEventListener('click', closeAccountOnDocClick);
+});
 
 const handleSearch = () => {
     if (!searchQuery.value.trim()) { searchResults.value = []; return; }
@@ -202,6 +221,89 @@ const heroGradient = (title) => {
                             <p>No results for "{{ searchQuery }}"</p>
                         </div>
                     </div>
+                    <!-- Right Controls -->
+                <div class="navbar__actions">
+                    <!-- Search -->
+                    <div class="search-wrapper" :class="{ 'search-wrapper--open': searchOpen }">
+                        <input
+                            v-if="searchOpen"
+                            v-model="searchQuery"
+                            @input="handleSearch"
+                            @keydown.escape="closeSearch"
+                            placeholder="Search manhua, genres..."
+                            class="search-input"
+                            autofocus
+                        />
+                        <button @click="searchOpen = !searchOpen; if (!searchOpen) closeSearch()" class="icon-btn" aria-label="Search">
+                            <svg v-if="!searchOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+
+                        <!-- Search Dropdown -->
+                        <div v-if="searchOpen && searchResults.length" class="search-results">
+                            <a v-for="r in searchResults" :key="r.id" href="#" class="search-result-item">
+                                <div class="search-result-cover" :style="{ background: coverGradient(r.title) }">
+                                    <span>{{ r.title[0] }}</span>
+                                </div>
+                                <div>
+                                    <p class="search-result-title">{{ r.title }}</p>
+                                    <p class="search-result-genre">{{ r.genre }}</p>
+                                </div>
+                                <span class="search-result-rating">★ {{ r.rating }}</span>
+                            </a>
+                        </div>
+                        <div v-if="searchOpen && searchQuery && !searchResults.length" class="search-results search-results--empty">
+                            <p>No results for "{{ searchQuery }}"</p>
+                        </div>
+                    </div>
+
+
+                    <!-- Account: login / register or user menu -->
+                    <div v-if="canLogin" ref="accountMenuRef" class="account-menu">
+                        <button
+                            type="button"
+                            class="icon-btn account-menu__trigger"
+                            :class="{ 'account-menu__trigger--active': accountMenuOpen }"
+                            aria-label="Account menu"
+                            :aria-expanded="accountMenuOpen"
+                            aria-haspopup="true"
+                            @click="accountMenuOpen = !accountMenuOpen"
+                        >
+                            <svg class="account-menu__trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </button>
+                        <Transition name="account-dropdown">
+                            <div v-if="accountMenuOpen" class="account-menu__dropdown">
+                                <template v-if="authUser">
+                                    <p class="account-menu__label">{{ authUser.name }}</p>
+                                    <Link :href="route('dashboard')" class="account-menu__link" @click="accountMenuOpen = false">Dashboard</Link>
+                                    <Link :href="route('profile.edit')" class="account-menu__link" @click="accountMenuOpen = false">Profile</Link>
+                                    <Link
+                                        :href="route('logout')"
+                                        method="post"
+                                        as="button"
+                                        class="account-menu__link account-menu__link--button"
+                                        @click="accountMenuOpen = false"
+                                    >
+                                        Log out
+                                    </Link>
+                                </template>
+                                <template v-else>
+                                    <Link :href="route('login')" class="account-menu__link" @click="accountMenuOpen = false">Log in</Link>
+                                    <Link
+                                        v-if="canRegister"
+                                        :href="route('register')"
+                                        class="account-menu__link"
+                                        @click="accountMenuOpen = false"
+                                    >
+                                        Register
+                                    </Link>
+                                </template>
+                            </div>
+                        </Transition>
+                    </div>
 
                     <a href="#" class="btn-nav-cta">Start Reading</a>
 
@@ -229,6 +331,34 @@ const heroGradient = (title) => {
                         <a :href="link.href" @click="mobileMenuOpen = false" class="mobile-nav-link">{{ link.label }}</a>
                     </li>
                 </ul>
+                <div v-if="canLogin" class="mobile-auth">
+                    <p class="mobile-auth-title">Account</p>
+                    <template v-if="authUser">
+                        <p class="mobile-auth-user">{{ authUser.name }}</p>
+                        <Link :href="route('dashboard')" class="mobile-auth-link" @click="mobileMenuOpen = false">Dashboard</Link>
+                        <Link :href="route('profile.edit')" class="mobile-auth-link" @click="mobileMenuOpen = false">Profile</Link>
+                        <Link
+                            :href="route('logout')"
+                            method="post"
+                            as="button"
+                            class="mobile-auth-link mobile-auth-link--button"
+                            @click="mobileMenuOpen = false"
+                        >
+                            Log out
+                        </Link>
+                    </template>
+                    <template v-else>
+                        <Link :href="route('login')" class="mobile-auth-link" @click="mobileMenuOpen = false">Log in</Link>
+                        <Link
+                            v-if="canRegister"
+                            :href="route('register')"
+                            class="mobile-auth-link"
+                            @click="mobileMenuOpen = false"
+                        >
+                            Register
+                        </Link>
+                    </template>
+                </div>
             </div>
         </nav>
 
@@ -851,6 +981,150 @@ const heroGradient = (title) => {
 
 .hamburger {
     display: none;
+}
+
+/* Account menu (navbar) */
+.account-menu {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.account-menu__trigger-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.account-menu__trigger--active {
+    color: var(--text-primary);
+    border-color: var(--red);
+    background: rgba(200, 21, 42, 0.12);
+}
+
+.account-menu__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    padding: 8px;
+    background: var(--dark-2);
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 220;
+}
+
+.account-menu__label {
+    margin: 0 0 8px;
+    padding: 8px 10px 6px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+}
+
+.account-menu__link {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-align: left;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: color var(--transition), background var(--transition);
+    box-sizing: border-box;
+}
+
+.account-menu__link:hover {
+    color: var(--text-primary);
+    background: var(--dark-3);
+}
+
+.account-menu__link--button {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    color: var(--red);
+}
+
+.account-menu__link--button:hover {
+    color: var(--gold-light);
+}
+
+.account-dropdown-enter-active,
+.account-dropdown-leave-active {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.account-dropdown-enter-from,
+.account-dropdown-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+/* Mobile account block */
+.mobile-auth {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.mobile-auth-title {
+    margin: 0 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.mobile-auth-user {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    color: var(--text-primary);
+}
+
+.mobile-auth-link {
+    display: block;
+    padding: 12px 14px;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    border: none;
+    width: 100%;
+    text-align: left;
+    background: var(--dark-3);
+    cursor: pointer;
+    transition: color var(--transition), background var(--transition);
+    box-sizing: border-box;
+}
+
+.mobile-auth-link:hover {
+    color: var(--text-primary);
+    background: var(--dark-4);
+}
+
+.mobile-auth-link--button {
+    color: var(--red);
+    margin-top: 8px;
+}
+
+.mobile-auth-link--button:hover {
+    color: var(--gold-light);
 }
 
 /* Mobile Menu */
