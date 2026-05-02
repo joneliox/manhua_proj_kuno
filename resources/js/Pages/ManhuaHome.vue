@@ -12,356 +12,50 @@ const props = defineProps({
 });
 
 // ─── MOCK DATA (replace with props once controller supplies real data) ─────────
-const featured = ref(
-    props.featuredManhua.length
-        ? props.featuredManhua
-        : [
-              {
-                  id: 1,
-                  title: "Soul Land IV",
-                  cover: null,
-                  genre: "Action · Fantasy",
-                  rating: "9.8",
-                  chapters: 412,
-                  description:
-                      "Tang San returns in a new age where the Spirit Hall has crumbled and soul beasts walk among men once more.",
-              },
-              {
-                  id: 2,
-                  title: "Dragon Prince Yuan",
-                  cover: null,
-                  genre: "Cultivation · Adventure",
-                  rating: "9.5",
-                  chapters: 389,
-                  description:
-                      "A crown prince whose sacred dragon spirit was stolen must rise through impossible trials to reclaim his destiny.",
-              },
-              {
-                  id: 3,
-                  title: "Martial Peak",
-                  cover: null,
-                  genre: "Martial Arts · Romance",
-                  rating: "9.2",
-                  chapters: 891,
-                  description:
-                      "The journey to the martial peak is a lonely, solitary and long one. In the face of adversity, you must survive and remain unyielding.",
-              },
-              {
-                  id: 4,
-                  title: "Battle Through the Heavens",
-                  cover: null,
-                  genre: "Fantasy · Action",
-                  rating: "9.6",
-                  chapters: 505,
-                  description:
-                      "In a land where no magic is present, a land where only those with innate talent can challenge the heavens.",
-              },
-              {
-                  id: 5,
-                  title: "The King's Avatar",
-                  cover: null,
-                  genre: "Gaming · Sport",
-                  rating: "9.4",
-                  chapters: 322,
-                  description:
-                      "Regarded as a pro-player legend, Ye Xiu is forced to retire but mounts the greatest comeback in esports history.",
-              },
-          ],
-);
+const featured = ref(props.featuredManhua.length ? props.featuredManhua : [
+    { id: 1, title: 'Soul Land IV', cover: null, genre: 'Action · Fantasy', rating: '9.8', chapters: 412, description: 'Tang San returns in a new age where the Spirit Hall has crumbled and soul beasts walk among men once more.' },
+    { id: 2, title: 'Dragon Prince Yuan', cover: null, genre: 'Cultivation · Adventure', rating: '9.5', chapters: 389, description: 'A crown prince whose sacred dragon spirit was stolen must rise through impossible trials to reclaim his destiny.' },
+    { id: 3, title: 'Martial Peak', cover: null, genre: 'Martial Arts · Romance', rating: '9.2', chapters: 891, description: 'The journey to the martial peak is a lonely, solitary and long one. In the face of adversity, you must survive and remain unyielding.' },
+    { id: 4, title: 'Battle Through the Heavens', cover: null, genre: 'Fantasy · Action', rating: '9.6', chapters: 505, description: 'In a land where no magic is present, a land where only those with innate talent can challenge the heavens.' },
+    { id: 5, title: "The King's Avatar', cover: null, genre: 'Gaming · Sport', rating: '9.4', chapters: 322, description: 'Regarded as a pro-player legend, Ye Xiu is forced to retire but mounts the greatest comeback in esports history." },
+]);
 
-const trending = ref(
-    props.trendingToday.length
-        ? props.trendingToday
-        : [
-              {
-                  id: 1,
-                  title: "Soul Land IV",
-                  cover: null,
-                  genre: "Action",
-                  rating: "9.8",
-                  rank: 1,
-                  views: "2.1M",
-                  chapters: 412,
-              },
-              {
-                  id: 2,
-                  title: "Apotheosis",
-                  cover: null,
-                  genre: "Fantasy",
-                  rating: "9.1",
-                  rank: 2,
-                  views: "1.8M",
-                  chapters: 1102,
-              },
-              {
-                  id: 3,
-                  title: "Dragon Prince Yuan",
-                  cover: null,
-                  genre: "Cultivation",
-                  rating: "9.5",
-                  rank: 3,
-                  views: "1.6M",
-                  chapters: 389,
-              },
-              {
-                  id: 4,
-                  title: "Peerless Battle Spirit",
-                  cover: null,
-                  genre: "Martial Arts",
-                  rating: "8.9",
-                  rank: 4,
-                  views: "1.2M",
-                  chapters: 2014,
-              },
-              {
-                  id: 5,
-                  title: "Against The Gods",
-                  cover: null,
-                  genre: "Romance",
-                  rating: "9.3",
-                  rank: 5,
-                  views: "1.1M",
-                  chapters: 1749,
-              },
-              {
-                  id: 6,
-                  title: "Tales of Demons and Gods",
-                  cover: null,
-                  genre: "Adventure",
-                  rating: "9.0",
-                  rank: 6,
-                  views: "998K",
-                  chapters: 444,
-              },
-          ],
-);
+const trending = ref(props.trendingToday.length ? props.trendingToday : [
+    { id: 1, title: 'Soul Land IV', cover: null, genre: 'Action', rating: '9.8', rank: 1, views: '2.1M', chapters: 412 },
+    { id: 2, title: 'Apotheosis', cover: null, genre: 'Fantasy', rating: '9.1', rank: 2, views: '1.8M', chapters: 1102 },
+    { id: 3, title: 'Dragon Prince Yuan', cover: null, genre: 'Cultivation', rating: '9.5', rank: 3, views: '1.6M', chapters: 389 },
+    { id: 4, title: 'Peerless Battle Spirit', cover: null, genre: 'Martial Arts', rating: '8.9', rank: 4, views: '1.2M', chapters: 2014 },
+    { id: 5, title: 'Against The Gods', cover: null, genre: 'Romance', rating: '9.3', rank: 5, views: '1.1M', chapters: 1749 },
+    { id: 6, title: 'Tales of Demons and Gods', cover: null, genre: 'Adventure', rating: '9.0', rank: 6, views: '998K', chapters: 444 },
+]);
 
-const popular = ref(
-    props.popularManhua.length
-        ? props.popularManhua
-        : [
-              {
-                  id: 1,
-                  title: "Martial Peak",
-                  cover: null,
-                  genre: "Martial Arts",
-                  rating: "9.2",
-                  chapters: 891,
-                  status: "Ongoing",
-                  badge: "HOT",
-              },
-              {
-                  id: 2,
-                  title: "Battle Through the Heavens",
-                  cover: null,
-                  genre: "Fantasy",
-                  rating: "9.6",
-                  chapters: 505,
-                  status: "Completed",
-                  badge: null,
-              },
-              {
-                  id: 3,
-                  title: "The King's Avatar",
-                  cover: null,
-                  genre: "Gaming",
-                  rating: "9.4",
-                  chapters: 322,
-                  status: "Completed",
-                  badge: "TOP",
-              },
-              {
-                  id: 4,
-                  title: "Soul Land III",
-                  cover: null,
-                  genre: "Action",
-                  rating: "9.7",
-                  chapters: 598,
-                  status: "Ongoing",
-                  badge: "TOP",
-              },
-              {
-                  id: 5,
-                  title: "Fog Hill of Five Elements",
-                  cover: null,
-                  genre: "Action",
-                  rating: "9.9",
-                  chapters: 88,
-                  status: "Ongoing",
-                  badge: "NEW",
-              },
-              {
-                  id: 6,
-                  title: "A Record of a Mortal's Journey",
-                  cover: null,
-                  genre: "Cultivation",
-                  rating: "9.1",
-                  chapters: 367,
-                  status: "Ongoing",
-                  badge: null,
-              },
-              {
-                  id: 7,
-                  title: "Wu Dong Qian Kun",
-                  cover: null,
-                  genre: "Action",
-                  rating: "9.0",
-                  chapters: 498,
-                  status: "Completed",
-                  badge: null,
-              },
-              {
-                  id: 8,
-                  title: "Coiling Dragon",
-                  cover: null,
-                  genre: "Fantasy",
-                  rating: "9.3",
-                  chapters: 440,
-                  status: "Completed",
-                  badge: null,
-              },
-              {
-                  id: 9,
-                  title: "Nine Star Hegemon Body",
-                  cover: null,
-                  genre: "Martial Arts",
-                  rating: "8.8",
-                  chapters: 2001,
-                  status: "Ongoing",
-                  badge: null,
-              },
-              {
-                  id: 10,
-                  title: "Magic Emperor",
-                  cover: null,
-                  genre: "Fantasy",
-                  rating: "8.7",
-                  chapters: 412,
-                  status: "Ongoing",
-                  badge: "NEW",
-              },
-          ],
-);
+const popular = ref(props.popularManhua.length ? props.popularManhua : [
+    { id: 1, title: 'Martial Peak', cover: null, genre: 'Martial Arts', rating: '9.2', chapters: 891, status: 'Ongoing', badge: 'HOT' },
+    { id: 2, title: 'Battle Through the Heavens', cover: null, genre: 'Fantasy', rating: '9.6', chapters: 505, status: 'Completed', badge: null },
+    { id: 3, title: "The King's Avatar", cover: null, genre: 'Gaming', rating: '9.4', chapters: 322, status: 'Completed', badge: 'TOP' },
+    { id: 4, title: 'Soul Land III', cover: null, genre: 'Action', rating: '9.7', chapters: 598, status: 'Ongoing', badge: 'TOP' },
+    { id: 5, title: 'Fog Hill of Five Elements', cover: null, genre: 'Action', rating: '9.9', chapters: 88, status: 'Ongoing', badge: 'NEW' },
+    { id: 6, title: 'A Record of a Mortal\'s Journey', cover: null, genre: 'Cultivation', rating: '9.1', chapters: 367, status: 'Ongoing', badge: null },
+    { id: 7, title: 'Wu Dong Qian Kun', cover: null, genre: 'Action', rating: '9.0', chapters: 498, status: 'Completed', badge: null },
+    { id: 8, title: 'Coiling Dragon', cover: null, genre: 'Fantasy', rating: '9.3', chapters: 440, status: 'Completed', badge: null },
+    { id: 9, title: 'Nine Star Hegemon Body', cover: null, genre: 'Martial Arts', rating: '8.8', chapters: 2001, status: 'Ongoing', badge: null },
+    { id: 10, title: 'Magic Emperor', cover: null, genre: 'Fantasy', rating: '8.7', chapters: 412, status: 'Ongoing', badge: 'NEW' },
+]);
 
-const latest = ref(
-    props.latestUpdates.length
-        ? props.latestUpdates
-        : [
-              {
-                  id: 1,
-                  title: "Soul Land IV",
-                  cover: null,
-                  genre: "Action",
-                  latestChapter: 412,
-                  updatedAt: "2 min ago",
-                  isNew: true,
-              },
-              {
-                  id: 2,
-                  title: "Martial Peak",
-                  cover: null,
-                  genre: "Martial Arts",
-                  latestChapter: 891,
-                  updatedAt: "15 min ago",
-                  isNew: true,
-              },
-              {
-                  id: 3,
-                  title: "Dragon Prince Yuan",
-                  cover: null,
-                  genre: "Cultivation",
-                  latestChapter: 389,
-                  updatedAt: "1 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 4,
-                  title: "Apotheosis",
-                  cover: null,
-                  genre: "Fantasy",
-                  latestChapter: 1102,
-                  updatedAt: "2 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 5,
-                  title: "Against The Gods",
-                  cover: null,
-                  genre: "Romance",
-                  latestChapter: 1749,
-                  updatedAt: "3 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 6,
-                  title: "Battle Through the Heavens",
-                  cover: null,
-                  genre: "Fantasy",
-                  latestChapter: 505,
-                  updatedAt: "5 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 7,
-                  title: "The King's Avatar",
-                  cover: null,
-                  genre: "Gaming",
-                  latestChapter: 322,
-                  updatedAt: "6 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 8,
-                  title: "Fog Hill of Five Elements",
-                  cover: null,
-                  genre: "Action",
-                  latestChapter: 88,
-                  updatedAt: "8 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 9,
-                  title: "Nine Star Hegemon Body",
-                  cover: null,
-                  genre: "Martial Arts",
-                  latestChapter: 2001,
-                  updatedAt: "10 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 10,
-                  title: "Peerless Battle Spirit",
-                  cover: null,
-                  genre: "Martial Arts",
-                  latestChapter: 2014,
-                  updatedAt: "12 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 11,
-                  title: "Tales of Demons and Gods",
-                  cover: null,
-                  genre: "Adventure",
-                  latestChapter: 444,
-                  updatedAt: "14 hr ago",
-                  isNew: false,
-              },
-              {
-                  id: 12,
-                  title: "Coiling Dragon",
-                  cover: null,
-                  genre: "Fantasy",
-                  latestChapter: 440,
-                  updatedAt: "1 day ago",
-                  isNew: false,
-              },
-          ],
-);
-
-const page = usePage();
-const authUser = computed(() => page.props.auth?.user ?? null);
-const canLogin = computed(() => page.props.canLogin !== false);
-const canRegister = computed(() => page.props.canRegister !== false);
+const latest = ref(props.latestUpdates.length ? props.latestUpdates : [
+    { id: 1, title: 'Soul Land IV', cover: null, genre: 'Action', latestChapter: 412, updatedAt: '2 min ago', isNew: true },
+    { id: 2, title: 'Martial Peak', cover: null, genre: 'Martial Arts', latestChapter: 891, updatedAt: '15 min ago', isNew: true },
+    { id: 3, title: 'Dragon Prince Yuan', cover: null, genre: 'Cultivation', latestChapter: 389, updatedAt: '1 hr ago', isNew: false },
+    { id: 4, title: 'Apotheosis', cover: null, genre: 'Fantasy', latestChapter: 1102, updatedAt: '2 hr ago', isNew: false },
+    { id: 5, title: 'Against The Gods', cover: null, genre: 'Romance', latestChapter: 1749, updatedAt: '3 hr ago', isNew: false },
+    { id: 6, title: 'Battle Through the Heavens', cover: null, genre: 'Fantasy', latestChapter: 505, updatedAt: '5 hr ago', isNew: false },
+    { id: 7, title: "The King's Avatar", cover: null, genre: 'Gaming', latestChapter: 322, updatedAt: '6 hr ago', isNew: false },
+    { id: 8, title: 'Fog Hill of Five Elements', cover: null, genre: 'Action', latestChapter: 88, updatedAt: '8 hr ago', isNew: false },
+    { id: 9, title: 'Nine Star Hegemon Body', cover: null, genre: 'Martial Arts', latestChapter: 2001, updatedAt: '10 hr ago', isNew: false },
+    { id: 10, title: 'Peerless Battle Spirit', cover: null, genre: 'Martial Arts', latestChapter: 2014, updatedAt: '12 hr ago', isNew: false },
+    { id: 11, title: 'Tales of Demons and Gods', cover: null, genre: 'Adventure', latestChapter: 444, updatedAt: '14 hr ago', isNew: false },
+    { id: 12, title: 'Coiling Dragon', cover: null, genre: 'Fantasy', latestChapter: 440, updatedAt: '1 day ago', isNew: false },
+]);
 
 // ─── NAVBAR STATE ──────────────────────────────────────────────────────────────
 const mobileMenuOpen = ref(false);
