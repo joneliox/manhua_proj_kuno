@@ -514,95 +514,6 @@ const heroGradient = (title) => {
 
                 <!-- Right Controls -->
                 <div class="navbar__actions">
-                    <!-- Search -->
-                    <div
-                        class="search-wrapper"
-                        :class="{ 'search-wrapper--open': searchOpen }"
-                    >
-                        <input
-                            v-if="searchOpen"
-                            v-model="searchQuery"
-                            @input="handleSearch"
-                            @keydown.escape="closeSearch"
-                            placeholder="Search manhua, genres..."
-                            class="search-input"
-                            autofocus
-                        />
-                        <button
-                            @click="
-                                searchOpen = !searchOpen;
-                                if (!searchOpen) closeSearch();
-                            "
-                            class="icon-btn"
-                            aria-label="Search"
-                        >
-                            <svg
-                                v-if="!searchOpen"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <circle cx="11" cy="11" r="8" />
-                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                            </svg>
-                            <svg
-                                v-else
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <line x1="18" y1="6" x2="6" y2="18" />
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                        </button>
-
-                        <!-- Search Dropdown -->
-                        <div
-                            v-if="searchOpen && searchResults.length"
-                            class="search-results"
-                        >
-                            <a
-                                v-for="r in searchResults"
-                                :key="r.id"
-                                href="#"
-                                class="search-result-item"
-                            >
-                                <div
-                                    class="search-result-cover"
-                                    :style="{
-                                        background: coverGradient(r.title),
-                                    }"
-                                >
-                                    <span>{{ r.title[0] }}</span>
-                                </div>
-                                <div>
-                                    <p class="search-result-title">
-                                        {{ r.title }}
-                                    </p>
-                                    <p class="search-result-genre">
-                                        {{ r.genre }}
-                                    </p>
-                                </div>
-                                <span class="search-result-rating"
-                                    >★ {{ r.rating }}</span
-                                >
-                            </a>
-                        </div>
-                        <div
-                            v-if="
-                                searchOpen &&
-                                searchQuery &&
-                                !searchResults.length
-                            "
-                            class="search-results search-results--empty"
-                        >
-                            <p>No results for "{{ searchQuery }}"</p>
-                        </div>
-                    </div>
-                    <!-- Right Controls -->
-                    <div class="navbar__actions">
                         <!-- Search -->
                         <div
                             class="search-wrapper"
@@ -829,7 +740,6 @@ const heroGradient = (title) => {
                                 />
                             </svg>
                         </button>
-                    </div>
                 </div>
 
                 <!-- Mobile Menu Drawer -->
